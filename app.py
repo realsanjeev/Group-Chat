@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, session
+from flask import Flask, redirect, request, session, render_template
 from flask_session import Session
 # from flask_session.__init__ import Session
 
@@ -14,11 +14,7 @@ def initiate():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    print('-'*77)
-    session['logged_in'] = True
-    print (type(session.get('logged_in')))
-    print('-'*77)
-    return('FRom login redirect')
+    return render_template('index.html')
 
 @app.route('/signup')
 def signup():
