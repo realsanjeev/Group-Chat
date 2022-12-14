@@ -2,10 +2,11 @@
 DBMS project to create a chat group web-application
 
 # DATABASE
-user
-	-username
-	-id
-	
+| user     |  
+|----------|
+| userid   | 
+| username | 
+| password | 
 group
 	-id
 	-groupname

@@ -17,7 +17,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        with open('user.txt') as f:
+        with open('user.txt', 'w') as f:
             f.write(username)
     return render_template('signin.html')
 
