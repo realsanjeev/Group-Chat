@@ -19,10 +19,21 @@ def login():
         password = request.form['password']
         with open('user.txt', 'w') as f:
             f.write(username)
+            f.write(password)
     return render_template('signin.html')
 
-@app.route('/signup')
+@app.route('/signup', methods=["GET", "POST"])
 def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        email = request.form['email']
+        password = request.form['password']
+        psw_repeat = request.form['psw-repeat']
+        txt = username + firstname +lastname + password + psw_repeat + email
+        with open('sign.txt', 'w') as fp:
+            fp.write(txt)
     return render_template('signup.html')
 
 @app.route('/logout', methods=["GET", "POST"])
