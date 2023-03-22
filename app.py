@@ -36,6 +36,10 @@ def signup():
             fp.write(txt)
     return render_template('signup.html')
 
+@app.route("/termsAndPrivacy")
+def display_terms_condition():
+    return render_template("terms_privacy.html")
+
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
     return redirect('/login')

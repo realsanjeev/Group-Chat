@@ -1,7 +1,13 @@
+body {
+  background: linear-gradient(to bottom, #0074D9, #2ECC40);
+
+}
+
 .center-block {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0%);
+  background-color: whitesmoke;
 }
 
 /* Bordered form */
