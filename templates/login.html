@@ -1,39 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real chat</title>
-    <link rel="stylesheet" href="static/style.css">
-    <link rel="icon" type="image/x-icon" href="static/images/webtitle.ico">
-</head>
-<body>
-    <div class="container">
-        <form action="/login" method="post">
-            <div class="imgcontainer">
-              <img src="static/images/webtitle.ico" alt="Sabko Kitab" class="avatar">
-            </div>
-          
-            <div class="container">
-              <label for="uname"><b>Username</b></label>
-              <input type="text" placeholder="Enter Username" name="username" required>
-          
-              <label for="psw"><b>Password</b></label>
-              <input type="password" placeholder="Enter Password" name="password" required>
-          
-              <button type="submit">Login</button>
-              <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
-              </label>
-              <span class="psw">Forgot <a href="#">password?</a></span>
-            </div>
-          
-            <div class="container" style="background-color:#f1f1f1">
-              <a href="templates/signup.html"><button type="button" class="signup">Sign Up</button></a>
-              
-            </div>
-          </form>
-    </div>
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block title %}
+: Login
+{% endblock %}
+
+{% block bodyContent %}
+<div class="center-block">
+  <div class="container">
+    <form action="/login" method="post">
+      <div class="imgcontainer">
+        <img src="{{url_for('static', filename='images/webtitle.ico')}}" alt="Sabko Kitab" class="avatar">
+      </div>
+
+      <div class="container">
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="username" required>
+
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+
+        <button type="submit">Login</button>
+        <label>
+          <input type="checkbox" checked="checked" name="remember"> Remember me
+        </label>
+        <hr />
+        <label class="psw">
+          Forgot <a href="#">password?</a>
+        </label>
+      </div>
+
+      <div class="container" style="background-color:#f1f1f1">
+        <a href="/authenticate"><button type="button" class="signup">Sign Up</button></a>
+
+      </div>
+    </form>
+  </div>
+</div>
+{%endblock bodyContent%}
