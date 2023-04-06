@@ -2,6 +2,7 @@ import sqlite3
 import re
 
 def connect_database(database):
+    conn = None
     try:
         conn = sqlite3.connect(database=database)
         print("Connected to database...")
@@ -16,6 +17,7 @@ def create_table(conn, sql_command):
     table_name = re.search(r"\b(\w+)\s*\(", sql_command).group(1)
     try:
         cursor.execute(sql_command)
+        cursor.commit()
         print(f"Table {table_name.upper()} is created.")
     except sqlite3.Error as err:
         print(f"Failed to execute command for table {table_name.upper()} creation. Error: {err}")
@@ -37,6 +39,11 @@ if __name__ == "__main__":
                                     user_id integer NOT NULL,
                                     FOREIGN KEY (user_id) REFERENCES user (id)
                                 );"""
+    sql_profile_pic_table = """ CREATE TABLE IF NOT EXISTS profile_pic (
+                                        id integer PRIMARY KEY,
+                                        user_id integer NOT NULL,
+                                        FOREIGN KEY (user_id) REFERENCES profile_pic (id)
+                                    ); """
     conn = connect_database(database_name)
     create_table(conn, sql_user_table)
     create_table(conn, sql_userinfo_table)

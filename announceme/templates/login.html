@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+     <div class="alert alert-info Alert" role="alert">
+      Log,In Please!!
+     </div>
+
+
+    <form class="form" action="/login" method="post">
+        <table>
+        <tr>
+            <td>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="userName" placeholder="Username" type="text" size="20">
+        </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+        <div class="form-group">
+            <input class="form-control" name="password" placeholder="Password" type="password" size="20">
+        </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+        <button class="btn btn-primary" type="submit">Log In</button>
+        <a href="/signup">Sign Up</a>
+            </td>
+        </tr>
+        </table>
+    </form>
+{% endblock %}
