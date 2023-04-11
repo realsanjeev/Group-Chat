@@ -36,7 +36,7 @@ def signup():
             fp.write(txt)
     return render_template('signup.html')
 
-@app.route("/termsAndPrivacy")
+@app.route("/terms-and-conditions")
 def display_terms_condition():
     return render_template("terms_privacy.html")
 

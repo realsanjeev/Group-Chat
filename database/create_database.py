@@ -39,17 +39,20 @@ def create_table(connect, sql_command):
 
     Example:
         create_table(connection, 
-        "CREATE TABLE employees (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+        "CREATE TABLE employees (id INTEGER PRIMARY KEY, 
+                                name TEXT,
+                                age INTEGER)")
     """
     cursor = connect.cursor()
     # search for the word "table name""
     table_name = re.search(r"\b(\w+)\s*\(", sql_command).group(1)
     try:
         cursor.execute(sql_command)
-        cursor.commit()
+        connect.commit()
         print(f"Table {table_name.upper()} is created.")
     except sqlite3.Error as err:
         print(f"Failed to execute command for table {table_name.upper()} creation. Error: {err}")
+        print(sql_command)
 
 
 if __name__ == "__main__":
@@ -60,4 +63,7 @@ if __name__ == "__main__":
     create_table(conn, table.PROFILE_PIC)
     create_table(conn, table.GROUP)
     create_table(conn, table.MEMBER)
+    create_table(conn, table.POST)
+    create_table(conn, table.LIKE)
+    create_table(conn, table.COMMENT)
     

@@ -31,14 +31,15 @@ def group():
                             members.groupId = grp.groupId 
                             WHERE members.userName=? """, (userName,)).fetchall()
         print("="*100, '\n', groups, " TYPE: ", type(groups), '\n', "="*100)
-        return render_template("groups.html", groups=groups[0])
+        return render_template("groups.html", groups=groups)
     else:
         if request.form.get("groupId"):
+            groupId = request.form.get("groupId")
             checkRow = db.execute("""SELECT * FROM members
                                     WHERE groupId=?
                                     AND 
                                     userName=?""", (groupId, userName))
-            if len(checkRow) == 0:
+            if not checkRow:
                 return render_template("apology.html",
                                        message="Group Doesn't exist For you")
 
@@ -70,16 +71,20 @@ def group():
                                        message="Group already exists!!")
 
         elif request.form.get("groupToJoin"):  # join group
+            groupName = request.form.get("groupToJoin")
             check = db.execute(
                 "SELECT * FROM grp WHERE groupName=?", (groupName,))
-            if len(check) == 0:
+            if not check:
                 return render_template("apology.html",
                                        message="There is no such group to join")
             else:
                 id = db.execute(
-                    "SELECT groupId FROM grp where groupName=?", (groupName,))
+                    "SELECT groupId FROM grp where groupName=?", (groupName,)).fetchone()
+                if not id:
+                    return render_template("apology.html",
+                                       message="There is no such group to join")
                 db.execute(
-                    "INSERT INTO members (groupId,userName) VALUES (?, ?)", (groupId, userName))
+                    "INSERT INTO members (groupId,userName) VALUES (?, ?)", (id[0], userName))
                 return redirect("/group")
 
 
@@ -91,7 +96,7 @@ def posts():
             postId = request.form.get("like")
             tada = db.execute(
                 "SELECT * FROM liked WHERE postId=? AND likedBy=?", (postId, likedBy))
-            if len(tada) == 0:
+            if not tada:
                 db.execute(
                     "INSERT INTO liked(postId,likedBy) VALUES (?, ?)", (postId, likedBy))
             else:
@@ -124,16 +129,28 @@ def posts():
                        (postedBy, groupId, post))
             return redirect("/posts")
     else:
+        likedBy = session["userName"]
         thisUserLikes = db.execute(
             "SELECT postId FROM liked WHERE likedBy=?", (likedBy,))
         likes = db.execute(
             "SELECT COUNT(likedBy) numberOfLikes,postId FROM liked GROUP BY postId")
-        posts = db.execute("""SELECT postId,postedBy,postedAt,post
+        groupId=session["groupId"]
+        posts_group = db.execute("""SELECT postId,postedBy,postedAt,post
                                 FROM  posts  
                                 WHERE groupId=?
-                                ORDER BY postedAt DESC""", groupId=session["groupId"])
+                                ORDER BY postedAt DESC""", groupId).fetchall() ##
+        print("!"*100, posts_group)
+        
+        
+        
+        
+        
+        
+        
+        
+        #err
         return render_template("group.html",
-                               posts=posts,
+                               posts=posts_group,
                                likes=likes,
                                thisUserLikes=thisUserLikes)
 
