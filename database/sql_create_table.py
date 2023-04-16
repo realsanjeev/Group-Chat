@@ -14,7 +14,7 @@ USERINFO = """CREATE TABLE IF NOT EXISTS userinfo (
                             lastname TEXT NOT NULL,
                             gender TEXT NOT NULL,
                             dob TEXT NOT NULL,
-                            email TEXT NOT NULL,
+                            email TEXT NOT NULL UNIQUE,
                             FOREIGN KEY (user_id) REFERENCES user (id)
                         );"""
 PROFILE_PIC = """ CREATE TABLE IF NOT EXISTS profile_pic (

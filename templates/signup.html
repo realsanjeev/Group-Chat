@@ -6,7 +6,7 @@
 
 {% block bodyContent %}
 <div class="center-block">
-<form action="/register" method="post">
+<form action="/signup" method="post">
   <div class="imgcontainer">
     <img src="{{url_for('static', filename='images/webtitle.ico')}}" alt="Sabko Kitab" class="avatar">
   </div>
@@ -52,11 +52,30 @@
     <input type="text" placeholder="Enter Username" name="username" required>
 
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required minlength="8">
+    <input type="password" placeholder="Enter Password" name="password" required minlength="8" autocomplete="new-password">
 
     <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" required minlength="8">
+    <input type="password" placeholder="Repeat Password" name="psw-repeat" required minlength="8" autocomplete="new-password">
+    <div id="password-error" style="display: none; color: red;">Password must be at least 8 characters long.</div>
 
+
+    <script>
+      const passwordInput = document.getElementById('password');
+      const passwordRepeatInput = document.getElementById('password-repeat');
+  
+      passwordInput.addEventListener('input', validatePassword);
+      passwordRepeatInput.addEventListener('input', validatePassword);
+  
+      function validatePassword() {
+          if (passwordInput.value.length < 8 || passwordRepeatInput.value.length < 8) {
+              passwordRepeatInput.setCustomValidity('Passwords must be at least 8 characters long.');
+          } else if (passwordInput.value !== passwordRepeatInput.value) {
+              passwordRepeatInput.setCustomValidity('Passwords must match.');
+          } else {
+              passwordRepeatInput.setCustomValidity('');
+          }
+      }
+  </script>
     <label>
       <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
     </label>
@@ -70,5 +89,9 @@
   </div>
 </form>
 </div>
+
+
+
+
 
 {% endblock %}

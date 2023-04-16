@@ -56,7 +56,7 @@ def create_table(connect, sql_command):
 
 
 if __name__ == "__main__":
-    DATABASE = "first_db.sqlite"
+    DATABASE = "myDatabase.sqlite"
     conn = connect_database(DATABASE)
     create_table(conn, table.USER)
     create_table(conn, table.USERINFO)

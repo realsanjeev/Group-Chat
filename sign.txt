@@ -1,0 +1,6 @@
+username: 01159952zaqs
+          firstname:Yachu 
+          lastname: Joshi 
+          password: l
+            dob: 2023-04-20 email: 075bei048.yachuraj@pcampus.edu.np
+            gender: male
