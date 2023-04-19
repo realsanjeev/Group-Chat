@@ -22,6 +22,36 @@ def is_registered(username:str, email:str):
         return render_template("sorry.html", message=f"Username: {username} is already taken")
     return flag
 
+def get_user_profile(user_id: int):
+    """
+    Args:
+        user_id: int 
+            get user_id of logged user
+    Return:
+        user_profile: dict
+    """
+    user_profile = dict()
+    user_profile["user_id"] = user_id
+    get_record_by_username = db.execute("""SELECT * 
+                                            FROM userinfo 
+                                            WHERE 
+                                            user_id=?""", (user_id,)).fetchone()
+    profile_username = db.execute("""
+                            SELECT username FROM user 
+                            WHERE
+                            id=?""", (user_id,)).fetchone()[0]
+    # print("okkkk==========", profile_username)
+    user_profile["username"] = profile_username
+    fields = ["firstname", "middlename", "lastname", "gender", "dob", "email"]
+    for index, attribute in enumerate(fields):
+        user_profile[attribute] = get_record_by_username[index+1]
+    user_profile["name"] = user_profile["firstname"] + " "  + user_profile["middlename"] + " "  + user_profile["lastname"]
+
+    # print("---------------------------get_record_by_username , ", get_record_by_username)
+    return user_profile
+
+
+
 def register_user(user: dict):
     """
     Register the user in database
@@ -69,18 +99,12 @@ def login():
         else: 
             # if sucessful assign session to user
             session["user_id"] = record[0] #record=(id, username, password)
-        with open('user.txt', 'a') as f:
-            f.write(username)
-            f.write(password)
+        with open('user.txt', 'a') as fp:
+            fp.write(username)
+            fp.write(password)
         return redirect(url_for('home'))
     else:
         return render_template("login.html")
-
-@app.route("/home")
-def home():
-    if not session:
-        return redirect(url_for("login"))
-    return render_template("indexx.html", myid=session["user_id"])
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -121,6 +145,24 @@ def display_terms_condition():
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
     session.clear()
-    return redirect('/login')
+    return redirect(url_for("login"))
+
+@app.route("/home")
+def home():
+    print('='*100)
+    print(session)
+    if not session:
+        return redirect(url_for("login"))
+    profile = get_user_profile(session["user_id"])
+
+    return render_template("indexx.html", user=profile)
+
+@app.route("/profile")
+def profile_user():
+    if not session:
+        return redirect(url_for("login"))
+    profile = get_user_profile(session["user_id"])
+    return render_template("profile.html", user=profile)
+
 if __name__=="__main__":
     app.run(debug=True)

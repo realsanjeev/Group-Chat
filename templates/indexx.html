@@ -1,1 +1,11 @@
-<h1>Hello i am in session {{myid}}</h1>
+{%extends "index_layout.html"%}
+{% block title %}
+{{user["username"]}}
+{% endblock %}
+
+{% block index_layout %}
+{{user}}
+<h1>
+    {{user["firstname"]}}
+</h1>
+{% endblock %}

@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #333;
+  color: white;
+  position: relative;
+}
+
+/* responsive */
+nav.active {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+nav h2.logo {
+  font-weight: bold;
+  font-size: xx-large;
+}
+
+nav .bars {
+  position: absolute;
+  right: 1rem;
+  font-size: xx-large;
+  display: none;
+}
+
+ul.nav-links {
+  display: flex;
+}
+
+/* responsive */
+nav.active ul.nav-links {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+li.nav-link {
+  list-style: none;
+  margin: 0.5rem 1rem;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+}
+
+li.nav-link:hover {
+  background-color: #ccc;
+  color: #333;
+}
+
+li.nav-link.auth {
+  border: 2px solid white;
+  border-radius: 1rem;
+}
+
+li.nav-link a {
+  text-decoration: none;
+  color: inherit;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: large;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 800px) {
+  nav .bars {
+    display: block;
+  }
+
+  nav .nav-links {
+    display: none;
+  }
+}
+
+
+main {
+	text-align: center;
+	justify-content: center;
+	position: absolute;
+	top: 50%;
+	width: 33vw;
+	left: 33%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+@media screen and (max-width: 768px) {
+	main {
+		width: 100vw;
+		left: 0px;
+	}
+}
+
+main > div {
+	padding: 30px;
+	text-align: center;
+	background-color: #dadaff;
+	border-radius: 7px;
+}
+
+main img {
+	height: 190px;
+	width: 190px;
+	border-radius: 50%;
+}
+
+main h1 {
+	color: #000000;
+	font-size: 35px;
+	line-height: 40px;
+	margin-bottom: 0px;
+}
+
+main h1 > span {
+	font-size: 18px;
+	font-weight: 200;
+	line-height: 20px;
+}
+
+main a {
+	font-size: 22px;
+	text-decoration: none;
+	padding-right: 5px;
+	transition: all ease 0.25s;
+}
+
+/* Icon colours can be changed from here */
+
+main .a1 {
+	color: #0000ff;
+}
+
+main .a2 {
+	color: #ff0000;
+}
+
+main .a3 {
+	color: #000000;
+}
+
+main .a4 {
+	color: #000000;
+}
+
+main .a5 {
+	color: #1db954;
+}
+
+main .a6 {
+	color: #7289d9;
+}
+
+main .a7 {
+	color: #fc4f08;
+	padding-right: 0px !important;
+}
+
+main a:hover {
+	opacity: 25%;
+	font-size: 22.5px;
+}
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-card div:not(:last-child) {
+  margin-bottom: 10px;
+}
+

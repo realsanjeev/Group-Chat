@@ -1,0 +1,31 @@
+{%extends "index_layout.html"%}
+{% block title %}
+{{user["username"]}}
+{% endblock %}
+
+{% block index_layout %}
+
+<main>
+    <div>
+        <!-- Profile photo, name and other details can be changed from here -->
+        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
+        <h4>
+            {{user["name"]}}
+            <br />
+            <span style="font-weight: normal;">
+                @{{user["username"]}}
+            </span>
+        </h4>
+        <br />
+        <div class="profile-card">
+            <div>{{user["email"]}}</div>
+            <div>DOB: {{user["dob"]}}</div>
+            <div>Gender: {{user["dob"]}}</div>
+            <div>
+            </div>
+</main>
+</body>
+
+</html>
+
+{% endblock %}
