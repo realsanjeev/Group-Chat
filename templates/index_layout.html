@@ -18,12 +18,13 @@
   </div>
   <ul class="nav-links">
     <li class="nav-link"><a href="/home">Home</a></li>
-    <li class="nav-link"><a href="#">Groups</a></li>
+    <li class="nav-link"><a href="/group_ops">Groups</a></li>
     <li class="nav-link"><a href="/profile">Profile</a></li>
     <!-- <li class="nav-link auth"><a href="#">Register</a></li> -->
     <li class="nav-link auth"><a href="/logout">Log Out</a></li>
   </ul>
 </nav>
+<script src="{{url_for('static', filename='js/main.js')}}"></script>
 {% block index_layout %}
 {% endblock %}
 </body>

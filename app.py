@@ -12,27 +12,58 @@ Session(app)
 conn = sqlite3.connect("myDatabase.sqlite", check_same_thread=False)
 db = conn.cursor()
 
-def is_registered(username:str, email:str):
-    flag=False
-    get_record_by_email = db.execute("""SELECT id from user WHERE username=?""", (username,)).fetchone()
-    get_record_by_username = db.execute(""""SELECT id FROM userinfo WHERE email=?""", (email,)).fetchone()
+def is_registered(username: str, email: str):
+    """
+    Check if a user is already registered in the system, using their username and email address.
+
+    Args:
+        username (str): The username of the user to check.
+        email (str): The email address of the user to check.
+
+    Returns:
+        If the user is already registered with the given username or email,\
+        a `sorry.html` page with an error \
+        message is rendered. Otherwise, the function returns False.
+    """
+    flag = False
+    get_record_by_email = db.execute("""
+                                SELECT id 
+                                FROM user 
+                                WHERE username=?""", (username,)).fetchone()
+    get_record_by_username = db.execute(""""SELECT id
+                                            FROM userinfo 
+                                            WHERE email=?""", (email,)).fetchone()
     if get_record_by_email:
-        return render_template("sorry.html", message=f"User with email {email} already exist....")
+        return render_template("sorry.html", message=f"User with email {email} already exists.")
     elif get_record_by_username:
-        return render_template("sorry.html", message=f"Username: {username} is already taken")
+        return render_template("sorry.html", message=f"Username '{username}' is already taken.")
     return flag
+
 
 def get_user_profile(user_id: int):
     """
+    Get the user profile for a given user ID.
+
     Args:
-        user_id: int 
-            get user_id of logged user
-    Return:
-        user_profile: dict
+        user_id (int): The ID of the user to retrieve the profile for.
+
+    Returns:
+        dict: A dictionary containing the user's profile information.
+            The dictionary has the following keys:
+            - user_id (int): The ID of the user.
+            - username (str): The username of the user.
+            - firstname (str): The first name of the user.
+            - middlename (str): The middle name of the user.
+            - lastname (str): The last name of the user.
+            - gender (str): The gender of the user.
+            - dob (str): The date of birth of the user.
+            - email (str): The email address of the user.
+            - name (str): The full name of the user, including first name,
+                          middle name, and last name.
     """
     user_profile = dict()
     user_profile["user_id"] = user_id
-    get_record_by_username = db.execute("""SELECT * 
+    get_record_by_username = db.execute("""SELECT *
                                             FROM userinfo 
                                             WHERE 
                                             user_id=?""", (user_id,)).fetchone()
@@ -40,44 +71,120 @@ def get_user_profile(user_id: int):
                             SELECT username FROM user 
                             WHERE
                             id=?""", (user_id,)).fetchone()[0]
-    # print("okkkk==========", profile_username)
+
     user_profile["username"] = profile_username
     fields = ["firstname", "middlename", "lastname", "gender", "dob", "email"]
     for index, attribute in enumerate(fields):
         user_profile[attribute] = get_record_by_username[index+1]
-    user_profile["name"] = user_profile["firstname"] + " "  + user_profile["middlename"] + " "  + user_profile["lastname"]
+    user_profile["name"] = user_profile["firstname"] + " "  \
+                            + user_profile["middlename"] + " "  \
+                            + user_profile["lastname"]
 
-    # print("---------------------------get_record_by_username , ", get_record_by_username)
     return user_profile
-
-
 
 def register_user(user: dict):
     """
-    Register the user in database
+    Register the user in the database with their personal information and login credentials.
 
     Args:
-        user: dict -> keys passed {"firstname": , "middlename":, "lastname":, "dob":
-                                    "username": , "password", "email", "gender"}
-    Return:
-        render_template(sucess) if user is sucessfully saved
-        render_template(sorry) if user cannot be saved
+        user (dict): A dictionary containing user information with keys "firstname", "middlename",
+                     "lastname", "dob", "username", "password", "email", and "gender".
+
+    Returns:
+        If the user is successfully saved, this function returns a success message rendered by
+        the Flask template. If the user cannot be saved, it returns a sorry message rendered by the
+        Flask template.
     """
     try:
         db.execute("""
-                    INSERT INTO user (username, password) VALUES (?, ?)""", (user["username"], user["password"]))
-        userid = db.execute("""SELECT id FROM user WHERE username=?""", (user["username"],)).fetchone()[0]
+                    INSERT INTO user 
+                    (username, password) 
+                    VALUES (?, ?)""", (user["username"], user["password"]))
+        userid = db.execute("""SELECT id
+                                FROM user 
+                                WHERE username=?""", (user["username"],)).fetchone()[0]
         db.execute("""
-            INSERT INTO userinfo (user_id, firstName, middlename, lastname, gender, email, dob)
-            values (?,?,?,?,?,?,?)""", (userid, user["firstname"], user["middlename"], user["lastname"], user["gender"], user["email"], user["dob"]))
+            INSERT INTO userinfo 
+            (user_id, firstName, middlename, lastname, gender, email, dob)
+            values (?,?,?,?,?,?,?)
+            """, (userid, user["firstname"], user["middlename"], user["lastname"], \
+                  user["gender"], user["email"], user["dob"]))
         conn.commit()
+        return render_template("success.html")
     except sqlite3.Error as err:
         print("Error is: ", err)
         return render_template("sorry.html", message=err)
 
 
+def create_group(user_id: int, group_name: str):
+    """
+    Create a new group and add the specified user as a member.
+
+    Args:
+        user_id (int): The ID of the user creating the group.
+        group_name (str): The name of the group to be created.
+
+    Returns:
+        None.
+
+    Raises:
+        TemplateError: If the group already exists.
+
+    """
+    # Check if group already exists
+    group_id = db.execute(
+        """SELECT id FROM user_group WHERE name = ?""", (group_name,)
+    ).fetchone()
+
+    if group_id:
+        return render_template("sorry.html",
+            message=f"{group_name} already exists. Please choose a different \
+                name or join the existing group."
+        )
+
+    # Create new group and add user as member
+    db.execute("""INSERT INTO user_group (name) VALUES (?)""", (group_name,))
+    group_id = db.execute(
+        """SELECT id FROM user_group WHERE name = ?""", (group_name,)
+    ).fetchone()[0]
+    db.execute(
+        """INSERT INTO group_member 
+        (user_id, group_id) 
+        VALUES (?, ?)""",
+        (user_id, group_id),
+    )
+    conn.commit()
+
+
+def get_current_connection(user_id: int):
+    """
+    Retrieve the names of the groups that a user with the given `user_id` is a member of.
+
+    Args:
+        user_id: int - the id of the user to retrieve the group membership for.
+
+    Returns:
+        List of tuple - the names of the groups that the \
+            user with the given `user_id` is a member of.
+    """
+    groups_name = db.execute("""
+                        SELECT user_group.name
+                        FROM group_member 
+                        JOIN user_group ON user_group.id = group_member.group_id
+                        WHERE group_member.user_id=?
+                    """, (user_id,)).fetchall()
+
+    return groups_name
+
 @app.route('/')
-def initiate():
+@app.route('/')
+def initiate() -> redirect:
+    """
+    Redirect the user to the `home` page of the application.
+
+    Returns:
+        redirect - the response to redirect the user to the `home` page.
+    """
     return redirect(url_for("home"))
 
 @app.route('/login', methods=["GET", "POST"])
@@ -87,7 +194,7 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-    
+
         # check in database
         record = db.execute("""
                             SELECT * FROM user WHERE
@@ -96,7 +203,7 @@ def login():
         print(f"Record: {record}")
         if not record:
             return render_template("sorry.html", message="Either username or password mismatch")
-        else: 
+        else:
             # if sucessful assign session to user
             session["user_id"] = record[0] #record=(id, username, password)
         with open('user.txt', 'a') as fp:
@@ -140,12 +247,25 @@ def signup():
 
 @app.route("/terms-and-conditions")
 def display_terms_condition():
+    """
+    Displays the terms and conditions HTML template.
+
+    Returns:
+        A rendered HTML template for terms and conditions.
+    """
     return render_template("terms_privacy.html")
 
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
+    """
+    Logs out the user by clearing the session.
+
+    Returns:
+        A redirect to the login page.
+    """
     session.clear()
     return redirect(url_for("login"))
+
 
 @app.route("/home")
 def home():
@@ -164,5 +284,25 @@ def profile_user():
     profile = get_user_profile(session["user_id"])
     return render_template("profile.html", user=profile)
 
+
+@app.route("/group_ops", methods=["GET", "POST"])
+def group_ops():
+    if not session:
+        return redirect(url_for("login"))
+    groups = dict()
+    new_group = join_group = None
+    community = get_current_connection(user_id=session["user_id"])
+    print("@"*10, community)
+    groups["community"] = community
+    if request.method == "POST":
+        new_group = request.form.get("create-community")
+        join_group = request.form.get("join-community")
+
+    if new_group:
+        create_group(user_id=session["user_id"], group_name=new_group)
+
+    return render_template("group_ops.html", groups=groups)
+
+# @app.route("/group")
 if __name__=="__main__":
     app.run(debug=True)
