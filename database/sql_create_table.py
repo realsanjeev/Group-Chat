@@ -20,11 +20,12 @@ USERINFO = """CREATE TABLE IF NOT EXISTS userinfo (
 PROFILE_PIC = """ CREATE TABLE IF NOT EXISTS profile_pic (
                                 id integer PRIMARY KEY AUTOINCREMENT,
                                 user_id integer NOT NULL,
+                                pics Blob NOT NULL,
                                 FOREIGN KEY (user_id) REFERENCES profile_pic (id)
                             ); """
 GROUP = """ CREATE TABLE IF NOT EXISTS user_group (
                     id integer PRIMARY KEY AUTOINCREMENT,
-                    name text NOT NULL
+                    name text NOT NULL UNIQUE
                 );"""
 MEMBER = """ CREATE TABLE IF NOT EXISTS group_member (
                     user_id INTEGER NOT NULL,

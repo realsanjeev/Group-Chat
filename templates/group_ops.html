@@ -1,96 +1,33 @@
 {%extends "index_layout.html"%}
 {% block title %}
-group
+Group Dashboard
 {% endblock %}
 
 {% block index_layout %}
 {{user}}
-<style>
-    /* CSS for the Group Available section */
-    .group-available {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #f2f2f2;
-      padding: 10px;
-      font-weight: bold;
-    }
-  
-    /* CSS for the link button */
-    .link-button {
-      width: 200px;
-    }
-    .link-button a {
-      display: block;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      text-align: center;
-      text-decoration: none;
-    }
-    .link-button a:hover {
-      background-color: #3e8e41;
-    }
-  
-    /* CSS for the forms */
-    .forms {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    .forms form {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    input[type="text"]{
-      padding: 10px;
-      margin-bottom: 0px;
-      border: none;
-      border-radius: 5px;
-      box-shadow: 0 0 5px #ccc;
-      width: 100%;
-    }
-    input[type="submit"] {
-  background-color: rgba(0, 127, 245, 0.705);
-  border: none;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-}
 
-  </style>
-  
-  <div style="display: flex;">
-    <div style="width: 200px;">
-      <div class="group-available">Group Available</div>
-      {% for group in groups["community"] %}
-      <a href="#" style="display: block; padding: 10px; background-color: #4CAF50; color: white; text-align: center; text-decoration: none;">{{group[0]}}</a>
-      <br>
-      {% endfor %}
-    </div>
-    <div style="flex: 1;">
-      <form action="#" method="POST" style="padding: 10px;">
-        <label for="create-community">Create Group</label>
-        <input type="text" id="create-community" name="create-community" required placeholder="Create Group"><br><br>
-        <input type="submit" value="Create">
-      </form>
-      <form action="#" method="POST" style="padding: 10px;">
-        <label for="join-community">Join Group</label>
-        <input type="text" id="join-community" name="join-community" required placeholder="Join Group"><br><br>
-        <input type="submit" value="Join">
-      </form>
-    </div>
+<div style="display: flex;">
+  <div style="width: 200px;">
+    <div class="group-available">Group Available</div>
+    {% for group in groups["community"] %}
+    <a href="/group/{{group[0]}}"
+      style="display: block; padding: 10px; background-color: #4CAF50; color: white; text-align: center; text-decoration: none;">{{group[0]}}</a>
+    <br>
+    {% endfor %}
   </div>
-  
+  <div style="flex: 1;">
+    <form action="#" method="POST" style="padding: 10px;">
+      <label for="create-community">Create Group</label>
+      <input type="text" id="create-community" name="create-community" required placeholder="Create Group"><br><br>
+      <input type="submit" value="Create">
+    </form>
+    <form action="#" method="POST" style="padding: 10px;">
+      <label for="join-community">Join Group</label>
+      <input type="text" id="join-community" name="join-community" required placeholder="Join Group"><br><br>
+      <input type="submit" value="Join">
+    </form>
+  </div>
+</div>
+
 
 {% endblock %}

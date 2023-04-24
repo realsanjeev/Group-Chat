@@ -30,7 +30,7 @@ def is_registered(username: str, email: str):
                                 SELECT id 
                                 FROM user 
                                 WHERE username=?""", (username,)).fetchone()
-    get_record_by_username = db.execute(""""SELECT id
+    get_record_by_username = db.execute("""SELECT user_id
                                             FROM userinfo 
                                             WHERE email=?""", (email,)).fetchone()
     if get_record_by_email:
@@ -147,6 +147,41 @@ def create_group(user_id: int, group_name: str):
     group_id = db.execute(
         """SELECT id FROM user_group WHERE name = ?""", (group_name,)
     ).fetchone()[0]
+    db.execute(
+        """INSERT INTO group_member 
+        (user_id, group_id) 
+        VALUES (?, ?)""",
+        (user_id, group_id),
+    )
+    conn.commit()
+
+def join_group(user_id, group_name):
+    """
+    Join Group that already exist
+
+    Args:
+        user_id (int): The ID of the user creating the group.
+        group_name (str): The name of the group to be created.
+
+    Returns:
+        None.
+
+    Raises:
+        TemplateError: If the group already exists.
+
+    """
+    # Check if group already exists
+    group_id = db.execute(
+        """SELECT id FROM user_group WHERE name = ?""", (group_name,)
+    ).fetchone()
+
+    if not group_id:
+        return render_template("sorry.html",
+            message=f"{group_name} already exists. Please choose a different \
+                name or join the existing group."
+        )
+
+    # Add user as member in given Group
     db.execute(
         """INSERT INTO group_member 
         (user_id, group_id) 
@@ -290,18 +325,31 @@ def group_ops():
     if not session:
         return redirect(url_for("login"))
     groups = dict()
-    new_group = join_group = None
+    new_group = group_name = None
     community = get_current_connection(user_id=session["user_id"])
     print("@"*10, community)
     groups["community"] = community
     if request.method == "POST":
         new_group = request.form.get("create-community")
-        join_group = request.form.get("join-community")
+        group_name = request.form.get("join-community")
 
     if new_group:
         create_group(user_id=session["user_id"], group_name=new_group)
 
+    if group_name:
+        join_group(user_id=session["user_id"], group_name=group_name)
+
     return render_template("group_ops.html", groups=groups)
+
+@app.route("/group/<group_name>", methods=["GET", "POST"])
+def group_discussion(group_name):
+    if not session:
+        return redirect(url_for("login"))
+    
+    return render_template("discussion.html", group_name=group_name)
+
+# add url route in web application
+app.add_url_rule('/signout', 'logout', logout)
 
 # @app.route("/group")
 if __name__=="__main__":

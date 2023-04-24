@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
+
 *,
 *::before,
 *::after {
@@ -90,91 +91,92 @@ li.nav-link a {
 
 
 main {
-	text-align: center;
-	justify-content: center;
-	position: absolute;
-	top: 50%;
-	width: 33vw;
-	left: 33%;
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
+  text-align: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  width: 33vw;
+  left: 33%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 @media screen and (max-width: 768px) {
-	main {
-		width: 100vw;
-		left: 0px;
-	}
+  main {
+    width: 100vw;
+    left: 0px;
+  }
 }
 
-main > div {
-	padding: 30px;
-	text-align: center;
-	background-color: #dadaff;
-	border-radius: 7px;
+main>div {
+  padding: 30px;
+  text-align: center;
+  background-color: #dadaff;
+  border-radius: 7px;
 }
 
 main img {
-	height: 190px;
-	width: 190px;
-	border-radius: 50%;
+  height: 190px;
+  width: 190px;
+  border-radius: 50%;
 }
 
 main h1 {
-	color: #000000;
-	font-size: 35px;
-	line-height: 40px;
-	margin-bottom: 0px;
+  color: #000000;
+  font-size: 35px;
+  line-height: 40px;
+  margin-bottom: 0px;
 }
 
-main h1 > span {
-	font-size: 18px;
-	font-weight: 200;
-	line-height: 20px;
+main h1>span {
+  font-size: 18px;
+  font-weight: 200;
+  line-height: 20px;
 }
 
 main a {
-	font-size: 22px;
-	text-decoration: none;
-	padding-right: 5px;
-	transition: all ease 0.25s;
+  font-size: 22px;
+  text-decoration: none;
+  padding-right: 5px;
+  transition: all ease 0.25s;
 }
 
 /* Icon colours can be changed from here */
 
 main .a1 {
-	color: #0000ff;
+  color: #0000ff;
 }
 
 main .a2 {
-	color: #ff0000;
+  color: #ff0000;
 }
 
 main .a3 {
-	color: #000000;
+  color: #000000;
 }
 
 main .a4 {
-	color: #000000;
+  color: #000000;
 }
 
 main .a5 {
-	color: #1db954;
+  color: #1db954;
 }
 
 main .a6 {
-	color: #7289d9;
+  color: #7289d9;
 }
 
 main .a7 {
-	color: #fc4f08;
-	padding-right: 0px !important;
+  color: #fc4f08;
+  padding-right: 0px !important;
 }
 
 main a:hover {
-	opacity: 25%;
-	font-size: 22.5px;
+  opacity: 25%;
+  font-size: 22.5px;
 }
+
 .profile-card {
   display: flex;
   flex-direction: column;
@@ -185,3 +187,93 @@ main a:hover {
   margin-bottom: 10px;
 }
 
+/* CSS for the Group Available section */
+.group-available {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f2f2;
+  padding: 10px;
+  font-weight: bold;
+}
+
+/* CSS for the link button */
+.link-button {
+  width: 200px;
+}
+
+.link-button a {
+  display: block;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+}
+
+.link-button a:hover {
+  background-color: #3e8e41;
+}
+
+/* CSS for the forms */
+.forms {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.forms form {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input[type="text"] {
+  padding: 10px;
+  margin-bottom: 0px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #ccc;
+  width: 100%;
+}
+
+input[type="submit"] {
+  background-color: rgba(0, 127, 245, 0.705);
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.create-post {
+  margin: 10px;
+  padding-left: 10px
+}
+
+.create-post textarea {
+  width: 100%;
+  background: #eee;
+  padding: 10px;
+  border: 3px solid #C8102E;
+  border-radius: 5px;
+  text-align: left;
+  resize: None
+}
+
+.create-post button {
+  border: 1px solid gray;
+  cursor: pointer;
+  BACKGROUND-COLOR: #C8102E;
+  COLOR: white;
+  border-radius: 0px;
+  font-family: 'cairo', serif;
+}

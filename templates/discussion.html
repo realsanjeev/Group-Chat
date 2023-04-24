@@ -1,0 +1,27 @@
+{%extends "index_layout.html"%}
+{% block title %}
+Group Dashboard
+{% endblock %}
+
+{% block index_layout %}
+<div>
+    <h1 style="background-color: #f00; text-align: center; margin-top: 0px; 
+               padding: 0px; font-size: 36px; font-weight: bold;">
+        Group: {{ group_name.upper() }}
+    </h1>
+</div>
+
+
+<div style="display: flex;">
+        <div style="flex: 1;">
+            <form action="#" method="POST" style="padding: 10px;">
+                <label for="create-post">Create Post</label>
+                <div class="create-post" >
+                    <textarea dir="ltr" id="mytext" rows="5" name="mypost" placeholder="Write your idea.....">
+                    </textarea><br />
+                    <input type="submit" value="Post">
+                    </div>
+            </form>
+    </div>
+</div>
+{% endblock %}
