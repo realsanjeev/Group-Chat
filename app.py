@@ -241,9 +241,9 @@ def login():
         else:
             # if sucessful assign session to user
             session["user_id"] = record[0] #record=(id, username, password)
-        with open('user.txt', 'a') as fp:
-            fp.write(username)
-            fp.write(password)
+        # with open('user.txt', 'a') as fp:
+        #     fp.write(username)
+        #     fp.write(password)
         return redirect(url_for('home'))
     else:
         return render_template("login.html")
@@ -266,14 +266,14 @@ def signup():
 
         # Checking if username or email already exist or not
         status = is_registered(username=user["username"], email=user["email"])
-        txt = f"""username: {user["username"]}
-          firstname:{user["firstname"]} 
-          lastname: {user["lastname"]} 
-          password: {user["password"]}
-            dob: {user["dob"]} email: {user["email"]}
-            gender: {user["gender"]}"""
-        with open('sign.txt', 'a') as fp:
-            fp.write(txt)
+        # txt = f"""username: {user["username"]}
+        #   firstname:{user["firstname"]} 
+        #   lastname: {user["lastname"]} 
+        #   password: {user["password"]}
+        #     dob: {user["dob"]} email: {user["email"]}
+        #     gender: {user["gender"]}"""
+        # with open('sign.txt', 'a') as fp:
+        #     fp.write(txt)
         register_user(user=user)
         return render_template("success.html", title="Register Sucessful!!!")
     else:
