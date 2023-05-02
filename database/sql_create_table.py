@@ -1,5 +1,7 @@
 """
-SQL Command for creating Table
+SQL Command for creating Tables in DATABASE
+
+Author: RealSanjeev
 """
 
 USER = """ CREATE TABLE IF NOT EXISTS user (

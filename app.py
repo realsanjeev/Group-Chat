@@ -213,6 +213,15 @@ def get_current_connection(user_id: int):
 
     return groups_name
 
+def check_group(group):
+    group_record = db.execute(
+        """SELECT id FROM user_group WHERE name = ?""", (group,)
+    ).fetchone()
+    if group_record:
+        return True
+    else:
+        return False
+
 @app.route('/')
 @app.route('/')
 def initiate() -> redirect:
@@ -347,8 +356,43 @@ def group_ops():
 def group_discussion(group_name):
     if not session:
         return redirect(url_for("login"))
+    if check_group(group=group_name) == False:
+        return render_template("sorry.html",
+                                message=f"Group '{group_name}' not found.")
+    community = get_current_connection(user_id=session["user_id"])
+
+    # community returns list of tuple. So comapre tuple with list to check
+    if tuple(group_name) not in community:
+        print(f"group_name: {group_name} and community: {community}")
+
+        return render_template("sorry.html",
+                                message=f"You arenot member of Group '{group_name}'. \
+                                Please join group {group_name} to view this forum.")
     
-    return render_template("discussion.html", group_name=group_name)
+    forum = dict()
+    forum["group_name"] = group_name
+
+    if request.method == "POST":
+        new_post = request.form.get("create-post")
+        print(new_post)
+        create_post(user_id=session["user_id"], group=group_name, post=new_post)
+
+    return render_template("discussion.html", forum=forum)
+
+def create_post(user_id, group, post):
+    print("[INFO] Creating Post")
+    # try:
+    group_id = db.execute(
+        """SELECT id FROM user_group WHERE name = ?""", (group,)
+    ).fetchone()
+    db.execute("""
+                INSERT INTO posts 
+                (content, user_id, group_id) 
+                VALUES (?, ?, ?)""", (post, user_id, group_id[0]))
+    conn.commit()
+    # except sqlite3.Error:
+    #     return render_template("sorry.html",
+    #                             message=f"Failed to create post in group {group}")
 
 # add url route in web application
 app.add_url_rule('/signout', 'logout', logout)
