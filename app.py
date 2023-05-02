@@ -34,9 +34,11 @@ def is_registered(username: str, email: str):
                                             FROM userinfo 
                                             WHERE email=?""", (email,)).fetchone()
     if get_record_by_email:
-        return render_template("sorry.html", message=f"User with email {email} already exists.")
+        return render_template("sorry.html",
+                                message=f"User with email {email} already exists.")
     elif get_record_by_username:
-        return render_template("sorry.html", message=f"Username '{username}' is already taken.")
+        return render_template("sorry.html",
+                                message=f"Username '{username}' is already taken.")
     return flag
 
 
