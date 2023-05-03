@@ -372,6 +372,8 @@ def group_discussion(group_name):
     forum = dict()
     forum["group_name"] = group_name
 
+    posts = get_posts(user_id=session["user_id"], group=group_name)
+
     if request.method == "POST":
         new_post = request.form.get("create-post")
         print(new_post)
@@ -381,18 +383,32 @@ def group_discussion(group_name):
 
 def create_post(user_id, group, post):
     print("[INFO] Creating Post")
-    # try:
-    group_id = db.execute(
-        """SELECT id FROM user_group WHERE name = ?""", (group,)
-    ).fetchone()
-    db.execute("""
-                INSERT INTO posts 
-                (content, user_id, group_id) 
-                VALUES (?, ?, ?)""", (post, user_id, group_id[0]))
-    conn.commit()
-    # except sqlite3.Error:
-    #     return render_template("sorry.html",
-    #                             message=f"Failed to create post in group {group}")
+    try:
+        group_id = db.execute(
+            """SELECT id FROM user_group WHERE name = ?""", (group,)
+        ).fetchone()
+        db.execute("""
+                    INSERT INTO posts 
+                    (content, user_id, group_id) 
+                    VALUES (?, ?, ?)""", (post, user_id, group_id[0]))
+        conn.commit()
+    except sqlite3.Error:
+        return render_template("sorry.html",
+                                message=f"Failed to create post in group {group}")
+
+
+def get_posts(user_id, group):
+    try:
+        group_id = db.execute(
+            """SELECT id FROM user_group WHERE name = ?""", (group,)
+        ).fetchone()
+        db.execute("""SELECT user.username, posts.content, posts.doc
+                        FROM user JOIN on posts
+                        WHERE user.id = posts.user_id and group_id = (?)
+                    """, (group_id))
+    except sqlite3.Error as err:
+        print(f"[INFO] Error wile retriving posts: {err}")
+        return None
 
 # add url route in web application
 app.add_url_rule('/signout', 'logout', logout)
