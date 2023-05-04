@@ -246,7 +246,7 @@ def login():
                             SELECT * FROM user WHERE
                             username=? AND password=?""", (username, password)).fetchone()
 
-        print(f"Record: {record}")
+        print(f"[INFO] Record: {record}")
         if not record:
             return render_template("sorry.html", message="Either username or password mismatch")
         else:
@@ -315,7 +315,7 @@ def logout():
 
 @app.route("/home")
 def home():
-    print('='*100)
+    print("[INFO] Routing to /home of url")
     print(session)
     if not session:
         return redirect(url_for("login"))
@@ -327,6 +327,7 @@ def home():
 def profile_user():
     if not session:
         return redirect(url_for("login"))
+    print(f"[INFO] Issuue: construct /profile/<username>")
     profile = get_user_profile(session["user_id"])
     return render_template("profile.html", user=profile)
 
@@ -356,7 +357,7 @@ def group_ops():
 def group_discussion(group_name):
     if not session:
         return redirect(url_for("login"))
-    if check_group(group=group_name) == False:
+    if check_group(group=group_name) is False:
         return render_template("sorry.html",
                                 message=f"Group '{group_name}' not found.")
     community = get_current_connection(user_id=session["user_id"])
@@ -369,10 +370,14 @@ def group_discussion(group_name):
                                 message=f"You arenot member of Group '{group_name}'. \
                                 Please join group {group_name} to view this forum.")
     
-    forum = dict()
-    forum["group_name"] = group_name
+    forum = {
+        "group_name": group_name,
+        "posts": []
+    }
 
     posts = get_posts(user_id=session["user_id"], group=group_name)
+    if posts is not None:
+        forum["posts"] = posts
 
     if request.method == "POST":
         new_post = request.form.get("create-post")
@@ -402,10 +407,13 @@ def get_posts(user_id, group):
         group_id = db.execute(
             """SELECT id FROM user_group WHERE name = ?""", (group,)
         ).fetchone()
-        db.execute("""SELECT user.username, posts.content, posts.doc
-                        FROM user JOIN on posts
-                        WHERE user.id = posts.user_id and group_id = (?)
-                    """, (group_id))
+        posts = db.execute("""SELECT user.username, posts.content, posts.doc
+                FROM user JOIN posts ON user.id = posts.user_id
+                WHERE group_id = (?)""",
+                (group_id[0],)).fetchmany(5)
+        print(f"[INFO] getting all post for group....")
+        return posts
+        
     except sqlite3.Error as err:
         print(f"[INFO] Error wile retriving posts: {err}")
         return None
