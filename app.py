@@ -36,7 +36,7 @@ def is_registered(username: str, email: str):
     if get_record_by_email:
         return render_template("sorry.html",
                                 message=f"User with email {email} already exists.")
-    elif get_record_by_username:
+    if get_record_by_username:
         return render_template("sorry.html",
                                 message=f"Username '{username}' is already taken.")
     return flag
@@ -223,7 +223,6 @@ def check_group(group):
         return False
 
 @app.route('/')
-@app.route('/')
 def initiate() -> redirect:
     """
     Redirect the user to the `home` page of the application.
@@ -248,7 +247,7 @@ def login():
 
         print(f"[INFO] Record: {record}")
         if not record:
-            return render_template("sorry.html", message="Either username or password mismatch")
+            return render_template("login.html", message="Either username or password mismatch")
         else:
             # if sucessful assign session to user
             session["user_id"] = record[0] #record=(id, username, password)
@@ -263,9 +262,9 @@ def login():
 def signup():
     if session:
         return redirect("/home")
-    # creating dict for storing user information
-    user = dict()
     if request.method == 'POST':
+        # creating dict for storing user information
+        user = {}
         user["username"] = request.form.get('username')
         user["firstname"] = request.form.get('firstname')
         user["middlename"] = request.form.get('middlename')
@@ -278,8 +277,8 @@ def signup():
         # Checking if username or email already exist or not
         status = is_registered(username=user["username"], email=user["email"])
         # txt = f"""username: {user["username"]}
-        #   firstname:{user["firstname"]} 
-        #   lastname: {user["lastname"]} 
+        #   firstname:{user["firstname"]}
+        #   lastname: {user["lastname"]}
         #   password: {user["password"]}
         #     dob: {user["dob"]} email: {user["email"]}
         #     gender: {user["gender"]}"""
@@ -369,7 +368,7 @@ def group_discussion(group_name):
         return render_template("sorry.html",
                                 message=f"You arenot member of Group '{group_name}'. \
                                 Please join group {group_name} to view this forum.")
-    
+
     forum = {
         "group_name": group_name,
         "posts": []
@@ -411,9 +410,9 @@ def get_posts(user_id, group):
                 FROM user JOIN posts ON user.id = posts.user_id
                 WHERE group_id = (?)""",
                 (group_id[0],)).fetchmany(5)
-        print(f"[INFO] getting all post for group....")
+        print("[INFO] getting all post for group....")
         return posts
-        
+
     except sqlite3.Error as err:
         print(f"[INFO] Error wile retriving posts: {err}")
         return None
