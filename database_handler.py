@@ -1,6 +1,8 @@
 import sqlite3
 from flask import render_template
 
+from logger import logging
+
 class MyDatabase:
     def __init__(self, db_name,
                  check_same_thread=False):
@@ -114,7 +116,7 @@ class MyDatabase:
             self.conn.commit()
             return render_template("success.html")
         except sqlite3.Error as err:
-            print("Error is: ", err)
+            logging.error(f"register_user: {err}")
             return render_template("sorry.html", message=err)
 
 
@@ -141,9 +143,8 @@ class MyDatabase:
         if group_id:
             return render_template("sorry.html",
                                 message=f"{group_name} already exists. Please choose a different \
-                    name or join the existing group."
+                                    name or join the existing group."
                                 )
-
         # Create new group and add user as member
         self.db.execute(
             """INSERT INTO user_group (name) VALUES (?)""", (group_name,))
@@ -159,6 +160,7 @@ class MyDatabase:
         self.conn.commit()
         # join the group if you are creator of group
         self.join_group(user_id=user_id, group_name=group_name)
+        return True
 
 
     def join_group(self, user_id, group_name):
@@ -186,15 +188,19 @@ class MyDatabase:
                                 message=f"{group_name} already exists. Please choose a different \
                     name or join the existing group."
                                 )
-
-        # Add user as member in given Group
-        self.db.execute(
-            """INSERT INTO group_member 
-            (user_id, group_id) 
-            VALUES (?, ?)""",
-            (user_id, group_id[0]),
-        )
-        self.conn.commit()
+        try:
+            # Add user as member in given Group
+            self.db.execute(
+                """INSERT INTO group_member 
+                (user_id, group_id) 
+                VALUES (?, ?)""",
+                (user_id, group_id[0]),
+            )
+            self.conn.commit()
+        except sqlite3.Error as err:
+            logging.warning(f"[join_group]: {err}")
+            return False
+        return True
 
 
     def get_current_connection(self, user_id: int):
@@ -226,3 +232,35 @@ class MyDatabase:
             return True
         else:
             return False
+
+    def create_post(self, user_id, group, post):
+        print("[INFO] Creating Post")
+        try:
+            group_id = self.db.execute(
+                """SELECT id FROM user_group WHERE name = ?""", (group,)
+            ).fetchone()
+            self.db.execute("""
+                        INSERT INTO posts 
+                        (content, user_id, group_id) 
+                        VALUES (?, ?, ?)""", (post, user_id, group_id[0]))
+            self.conn.commit()
+        except sqlite3.Error:
+            return render_template("sorry.html",
+                                    message=f"Failed to create post in group {group}")
+
+
+    def get_posts(self, user_id, group):
+        try:
+            group_id = self.db.execute(
+                """SELECT id FROM user_group WHERE name = ?""", (group,)
+            ).fetchone()
+            posts = self.db.execute("""SELECT user.username, posts.content, posts.doc
+                    FROM user JOIN posts ON user.id = posts.user_id
+                    WHERE group_id = (?)""",
+                    (group_id[0],)).fetchmany(5)
+            print("[INFO] getting all post for group....")
+            return posts
+
+        except sqlite3.Error as err:
+            print(f"[INFO] Error wile retriving posts: {err}")
+            return None

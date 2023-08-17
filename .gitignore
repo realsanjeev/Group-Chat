@@ -4,7 +4,7 @@ __pycache__/
 *flask_session
 *.py[cod]
 *$py.class
-
+/logs
 # C extensions
 *.so
 

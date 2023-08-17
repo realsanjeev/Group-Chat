@@ -1,6 +1,5 @@
-import sqlite3
-from flask import (Flask, redirect, 
-                    request, session, 
+from flask import (Flask, redirect,
+                    request, session,
                     render_template, url_for)
 from flask_session import Session
 
@@ -113,7 +112,7 @@ def home():
         return redirect(url_for("login"))
     profile = database_conn.get_user_profile(session["user_id"])
 
-    return render_template("indexx.html", user=profile)
+    return render_template("home.html", user=profile)
 
 @app.route("/profile")
 def profile_user():
@@ -156,60 +155,31 @@ def group_discussion(group_name):
     community = database_conn.get_current_connection(user_id=session["user_id"])
 
     # community returns list of tuple. So comapre tuple with list to check
-    if tuple(group_name) not in community:
-        print(f"group_name: {group_name} and community: {community}")
+    if group_name not in community[0]:
+        print(f"group_name: {group_name} and community: {community}......\
+              {group_name not in community[0]}")
 
         return render_template("sorry.html",
-                                message=f"You arenot member of Group '{group_name}'. \
+                                message=f"You are not member of Group '{group_name}'. \
                                 Please join group {group_name} to view this forum.")
 
     forum = {
         "group_name": group_name,
         "posts": []
     }
-
-    posts = get_posts(user_id=session["user_id"], group=group_name)
-    if posts is not None:
-        forum["posts"] = posts
-
     if request.method == "POST":
         new_post = request.form.get("create-post")
         print(new_post)
-        create_post(user_id=session["user_id"], group=group_name, post=new_post)
+        database_conn.create_post(user_id=session["user_id"], group=group_name, post=new_post)
+        # Redirect the user after creating the post
+        return redirect(url_for("group_discussion", group_name=group_name))
+
+    posts = database_conn.get_posts(user_id=session["user_id"], group=group_name)
+    if posts is not None:
+        forum["posts"] = posts
+        forum["posts"].reverse()
 
     return render_template("discussion.html", forum=forum)
-
-def create_post(user_id, group, post):
-    print("[INFO] Creating Post")
-    try:
-        group_id = db.execute(
-            """SELECT id FROM user_group WHERE name = ?""", (group,)
-        ).fetchone()
-        db.execute("""
-                    INSERT INTO posts 
-                    (content, user_id, group_id) 
-                    VALUES (?, ?, ?)""", (post, user_id, group_id[0]))
-        conn.commit()
-    except sqlite3.Error:
-        return render_template("sorry.html",
-                                message=f"Failed to create post in group {group}")
-
-
-def get_posts(user_id, group):
-    try:
-        group_id = db.execute(
-            """SELECT id FROM user_group WHERE name = ?""", (group,)
-        ).fetchone()
-        posts = db.execute("""SELECT user.username, posts.content, posts.doc
-                FROM user JOIN posts ON user.id = posts.user_id
-                WHERE group_id = (?)""",
-                (group_id[0],)).fetchmany(5)
-        print("[INFO] getting all post for group....")
-        return posts
-
-    except sqlite3.Error as err:
-        print(f"[INFO] Error wile retriving posts: {err}")
-        return None
 
 # add url route in web application
 app.add_url_rule('/signout', 'logout', logout)
