@@ -29,17 +29,18 @@ Group Dashboard
 <div class="bottom">
     <div class="author">
         <div class="profile"></div>
-        <p class="name">By <a>{{post[0]}}</a></p>
+        <p class="name">By <a>{{ post[0] }}</a></p>
     </div>
-    <p class="intro">{{post[1]}} </p>
+    <p class="intro">{{ post[1] }}</p>
     <div class="info">
         <ion-icon name="time"></ion-icon>
-        <p class="info">{{post[2]}}</p>
+        <p class="info">{{ post[2] }}</p>
         <ion-icon name="chatboxes"></ion-icon>
         <p class="info"><a>0 comments</a></p>
     </div>
 </div>
-<script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
 {% endfor %}
+<script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
+
 
 {% endblock %}
