@@ -9,7 +9,7 @@ Welcome to Group's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+    module
 
 
 Indices and tables
