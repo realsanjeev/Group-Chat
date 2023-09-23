@@ -35,7 +35,7 @@ To automate the process of generating documentation, follow these steps:
    ```python
    import os
    import sys
-   sys.path.insert(0, os.path.abspath('.'))
+   sys.path.insert(0, os.path.abspath('..'))
    ```
 
 4. Use `sphinx-apidoc` to automatically generate documentation for your Python modules. This command should be run in the same directory as your Python files:

@@ -5,12 +5,11 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-project = 'Group Chat'
+project = 'Group'
 copyright = '2023, realsanjeev'
 author = 'realsanjeev'
 release = '0.1'
@@ -21,7 +20,11 @@ release = '0.1'
 extensions = []
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = extensions = [
+    'sphinx.ext.duration',
+    'sphinx.ext.doctest',
+    'sphinx.ext.autodoc',
+]
 
 
 
