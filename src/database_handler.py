@@ -1,7 +1,7 @@
 import sqlite3
 from flask import render_template
 
-from logger import logging
+from src.logger import logging
 
 class MyDatabase:
     def __init__(self, db_name,

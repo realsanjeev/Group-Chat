@@ -3,7 +3,7 @@ from flask import (Flask, redirect,
                     render_template, url_for)
 from flask_session import Session
 
-from database_handler import MyDatabase
+from src.database_handler import MyDatabase
 # from flask_session.__init__ import Session
 
 app = Flask(__name__)
@@ -13,6 +13,7 @@ app.config["SESSION_COOKIE_SECURE"] = True
 Session(app)
 
 database_conn = MyDatabase("myDatabase.sqlite")
+db = database_conn.db
 
 @app.route('/')
 def initiate() -> redirect:
