@@ -40,14 +40,14 @@ def login():
         print(f"[INFO] Record: {record}")
         if not record:
             return render_template(
-                "login.html", message="Either username or password mismatch"
+                "account/login.html", message="Either username or password mismatch"
             )
         else:
             # if successful assign session to user
             session["user_id"] = record[0]  # record = (id, username, password)
         return redirect(url_for("home"))
     else:
-        return render_template("login.html")
+        return render_template("account/login.html")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -75,7 +75,7 @@ def signup():
         user_db.register_user(user=user)
         return render_template("success.html", title="Register Successful!!!")
 
-    return render_template("signup.html")
+    return render_template("account/signup.html")
 
 
 @app.route("/terms-and-conditions")
@@ -117,7 +117,7 @@ def profile_user():
     if not session:
         return redirect(url_for("login"))
     profile = user_db.get_user_profile(session["user_id"])
-    return render_template("profile.html", user=profile)
+    return render_template("account/profile.html", user=profile)
 
 
 @app.route("/group_ops", methods=["GET", "POST"])
