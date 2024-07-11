@@ -86,7 +86,7 @@ def display_terms_condition():
     Returns:
         A rendered HTML template for terms and conditions.
     """
-    return render_template("terms_privacy.html")
+    return render_template("public/terms_privacy.html")
 
 
 @app.route("/logout", methods=["GET", "POST"])
