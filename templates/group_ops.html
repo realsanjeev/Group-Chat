@@ -4,11 +4,11 @@ Group Dashboard
 {% endblock %}
 
 {% block index_layout %}
-{{user}}
+{{ user }}
 
 <div style="display: flex;">
   <div style="width: 200px;">
-    <div class="group-available">Group Available</div>
+    <div class="group-available">Group Conection</div>
     {% for group in groups["community"] %}
     <a href="/group/{{ group[0] }}"
       style="display: block; padding: 10px; background-color: #4CAF50; color: white; text-align: center; text-decoration: none;">{{group[0]}}</a>

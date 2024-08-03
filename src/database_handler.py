@@ -157,7 +157,8 @@ class PostDatabase(MyDatabase):
                 "sorry.html", message=f"Failed to create post in group {group}"
             )
 
-    def get_posts(self, user_id, group):
+    def get_posts(self, group):
+        '''Return all the post from the group'''
         try:
             group_id = self.db.execute(
                 "SELECT id FROM user_group WHERE name = ?", (group,)
@@ -170,7 +171,7 @@ class PostDatabase(MyDatabase):
                 WHERE group_id = ?
             """,
                 (group_id[0],),
-            ).fetchmany(5)
+            ).fetchall()
             print("[INFO] getting all post for group....")
             return posts
         except sqlite3.Error as err:

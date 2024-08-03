@@ -145,8 +145,10 @@ def group_ops():
 def group_discussion(group_name):
     if not session:
         return redirect(url_for("login"))
+    
     if group_db.check_group(group=group_name) is False:
         return render_template("sorry.html", message=f"Group '{group_name}' not found.")
+    
     community = group_db.get_current_connection(user_id=session["user_id"])
 
     if group_name not in [group[0] for group in community]:
@@ -162,7 +164,9 @@ def group_discussion(group_name):
         post_db.create_post(user_id=session["user_id"], group=group_name, post=new_post)
         return redirect(url_for("group_discussion", group_name=group_name))
 
-    posts = post_db.get_posts(user_id=session["user_id"], group=group_name)
+    posts = post_db.get_posts(group=group_name)
+    print("*"*100)
+    print(posts)
     if posts is not None:
         forum["posts"] = posts
         forum["posts"].reverse()
