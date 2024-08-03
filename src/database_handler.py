@@ -81,6 +81,7 @@ class GroupDatabase(MyDatabase):
         group_id = self.db.execute(
             "SELECT id FROM user_group WHERE name = ?", (group_name,)
         ).fetchone()
+        print("okcddcssssdxsdsdsdiioiuioaaaaaaaaaaa")
         if group_id:
             return render_template(
                 "sorry.html",
