@@ -1,4 +1,4 @@
-{%extends "index_layout.html"%}
+{% extends "index_layout.html" %}
 {% block title %}
 Group Dashboard
 {% endblock %}
@@ -15,11 +15,10 @@ Group Dashboard
     <div style="flex: 1;">
         <form action="#" method="POST" style="padding: 10px;">
             <label for="create-post">Create Post</label>
-            <div class="create-post">
-                <textarea id="create-post" rows="5" name="create-post" placeholder="Write your idea.....">
-                    </textarea>
+            <div class="create-post" style="margin-top: 10px;">
+                <textarea id="create-post" rows="5" name="create-post" placeholder="Write your idea....."></textarea>
                 <br />
-                <input type="submit" value="Post">
+                <input type="submit" value="Post" style="margin-top: 10px;">
             </div>
         </form>
     </div>
@@ -40,7 +39,6 @@ Group Dashboard
     </div>
 </div>
 {% endfor %}
+
 <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
-
-
 {% endblock %}

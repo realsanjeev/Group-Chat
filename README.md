@@ -1,19 +1,33 @@
 # Group-Chat
-DBMS project to create a chat group web-application
 
-# DATABASE
-| user     |  	 	
-|----------|		
-| userid   | 		
-| username | 		
-| password | 		
+This DBMS project involves creating a web application for group chat. The application enables users to create groups, join groups, and post messages within the groups.
 
+### Steps to Set Up and Run the Application
 
-| group      |
-|------------|
-| groupid(p) |
-| groupname  |
-| userid     |
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/realsanjeev/Group-Chat.git group-chat
+   cd group-chat
+   ```
+
+2. **Create a Virtual Environment and Install Requirements (for Mac/Linux):**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Application:**
+   ```bash
+   python app.py
+   ```
+
+The app will open on the default port of the Flask application at [http://localhost:5000](http://localhost:5000).
+
+## Class Diagram of Database
+![Class diagram of database](static/images/class_diagram_of_db.png)
+
+User -> `admin` and Password -> `admin123`
 ## Automatically Generating Documentation
 
 To automate the process of generating documentation, follow these steps:

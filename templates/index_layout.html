@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}
-        {% endblock %}: Real Forum</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{url_for("static", filename="css/main.css")}}">
-    <link rel="icon" type="image/x-icon" href="{{url_for("static", filename="images/webtitle.ico")}}">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}: Real Forum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/webtitle.ico') }}">
 </head>
+
 <body>
-    <nav>
-  <h2 class="logo">Real Forum</h2>
-  <div class="bars">
-    <i class="fa fa-bars"></i>
-  </div>
-  <ul class="nav-links">
-    <li class="nav-link"><a href="/home">Home</a></li>
-    <li class="nav-link"><a href="/group_ops">Groups</a></li>
-    <li class="nav-link"><a href="/profile">Profile</a></li>
-    <!-- <li class="nav-link auth"><a href="#">Register</a></li> -->
-    <li class="nav-link auth"><a href="/logout">Log Out</a></li>
-  </ul>
-</nav>
-<script src="{{url_for('static', filename='js/main.js')}}"></script>
-{% block index_layout %}
-{% endblock %}
+  <nav>
+    <h2 class="logo">Real Forum</h2>
+    <div class="bars">
+      <i class="fa fa-bars"></i>
+    </div>
+    <ul class="nav-links">
+      <li class="nav-link"><a href="/home">Home</a></li>
+      <li class="nav-link"><a href="/group_ops">Groups</a></li>
+      <li class="nav-link"><a href="/profile">Profile</a></li>
+      <!-- <li class="nav-link auth"><a href="#">Register</a></li> -->
+      <li class="nav-link auth"><a href="/logout">Log Out</a></li>
+    </ul>
+  </nav>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block index_layout %}
+  {% endblock %}
 </body>
+
 </html>
