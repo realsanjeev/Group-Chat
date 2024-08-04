@@ -5,38 +5,49 @@
 {% endblock %}
 
 {% block bodyContent %}
-<div class="center-block">
-  <div class="container">
-    <form action="/login" method="post">
-      <div class="imgcontainer">
-        <img src="{{url_for('static', filename='images/webtitle.ico')}}" alt="Sabko Kitab" class="avatar">
+<link rel="stylesheet" href="{{url_for('static', filename='css/auth.css')}}">
+
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <div class="auth-header">
+      <img src="{{url_for('static', filename='images/webtitle.ico')}}" alt="Group Chat">
+      <h1>Welcome Back</h1>
+      <p>Login to continue to your account</p>
+    </div>
+
+    <form action="/login" method="post" class="auth-form">
+      {{ form.hidden_tag() }}
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        {{ form.username(placeholder="Enter your username") }}
+        {% if form.username.errors %}
+        <div class="error-message">
+          {% for error in form.username.errors %}
+          <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
 
-      <div class="container">
-        <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
-
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" required>
-
-        <button type="submit">Login</button>
-        <label>
-          <input type="checkbox" checked="checked" name="remember"> Remember me
-        </label>
-        <hr />
-        <label class="psw">
-          Forgot <a href="#">password?</a>
-        </label>
+      <div class="form-group">
+        <label for="password">Password</label>
+        {{ form.password(placeholder="Enter your password") }}
+        {% if form.password.errors %}
+        <div class="error-message">
+          {% for error in form.password.errors %}
+          <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
 
-      <div class="container" style="background-color:#f1f1f1">
-        <a href="/signup"><button type="button" class="signup">Sign Up</button></a>
-
-      </div>
+      <button type="submit" class="submit-btn">Login</button>
     </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a href="/signup">Sign up</a></p>
+    </div>
   </div>
-</div>
-<div class="center-block">
-  <div id="message">{{ message }}</div>
 </div>
 {% endblock %}

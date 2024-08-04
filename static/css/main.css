@@ -231,9 +231,13 @@ main a:hover {
   align-items: center;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="password"],
+.form-input {
   padding: 10px;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
   border: none;
   border-radius: 5px;
   box-shadow: 0 0 5px #ccc;
@@ -254,9 +258,13 @@ input[type="submit"] {
   border-radius: 4px;
 }
 
+input[type="submit"]:hover {
+  background-color: rgba(0, 100, 200, 0.85);
+}
+
 .create-post {
   margin: 10px;
-  padding-left: 10px
+  padding-left: 10px;
 }
 
 .create-post textarea {
@@ -266,14 +274,14 @@ input[type="submit"] {
   border: 3px solid #C8102E;
   border-radius: 5px;
   text-align: left;
-  resize: None
+  resize: vertical;
 }
 
 .create-post button {
   border: 1px solid gray;
   cursor: pointer;
-  BACKGROUND-COLOR: #C8102E;
-  COLOR: white;
+  background-color: #C8102E;
+  color: white;
   border-radius: 0px;
   font-family: 'cairo', serif;
 }
@@ -308,7 +316,7 @@ p {
 a:link,
 a:visited {
   text-decoration: none;
-  color: #;
+  color: #333;
 }
 
 a:hover {
@@ -357,4 +365,103 @@ ion-icon {
   width: 20px;
   display: flex;
   padding: 10px 8px 0 22px;
+}
+
+/* Flash messages */
+.flash-messages {
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+}
+
+/* Error messages */
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 8px 12px;
+  margin: 5px 0 10px 0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.error-message p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Radio buttons */
+.radio-group {
+  display: flex;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Group header */
+.group-header {
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  margin-top: 0px;
+  padding: 20px;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+/* Posts container */
+.posts-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.bottom {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-style: italic;
 }

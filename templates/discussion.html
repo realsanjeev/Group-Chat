@@ -1,44 +1,249 @@
 {% extends "index_layout.html" %}
 {% block title %}
-Group Dashboard
+Group Discussion
 {% endblock %}
 
 {% block index_layout %}
-<div>
-    <h1 style="background-color: #f00; text-align: center; margin-top: 0px; 
-               padding: 0px; font-size: 36px; font-weight: bold;">
-        Group: {{ forum["group_name"].upper() }}
-    </h1>
-</div>
+<div class="discussion-page">
+    <!-- Group Header -->
+    <div class="group-header">
+        <h1>{{ forum["group_name"].upper() }}</h1>
+    </div>
 
-<div style="display: flex;">
-    <div style="flex: 1;">
-        <form action="#" method="POST" style="padding: 10px;">
-            <label for="create-post">Create Post</label>
-            <div class="create-post" style="margin-top: 10px;">
-                <textarea id="create-post" rows="5" name="create-post" placeholder="Write your idea....."></textarea>
-                <br />
-                <input type="submit" value="Post" style="margin-top: 10px;">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Create Post Section -->
+    <div class="create-post-section">
+        <h2>Create Post</h2>
+        <form action="#" method="POST">
+            {{ post_form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ post_form.content(
+                rows="5",
+                placeholder="Share your thoughts with the group...",
+                class="post-textarea"
+                ) }}
+
+                {% if post_form.content.errors %}
+                <div class="error-message">
+                    {% for error in post_form.content.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
+
+            <button type="submit" class="post-btn">
+                <ion-icon name="send-outline"></ion-icon>
+                Post to Group
+            </button>
         </form>
     </div>
+
+    <!-- Posts Container -->
+    <div class="posts-container">
+        {% if forum["posts"] %}
+        {% for post in forum["posts"] %}
+        <div class="post-card" data-post-id="{{ post.post_id }}">
+            <!-- Post Author -->
+            <div class="post-author">
+                <div class="author-avatar">
+                    {{ post.username[0].upper() }}
+                </div>
+                <div class="author-info">
+                    <p class="author-name">
+                        <a href="#">{{ post.username }}</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Post Content -->
+            <div class="post-content">
+                {{ post.content }}
+            </div>
+
+            <!-- Post Meta (Timestamp) -->
+            <div class="post-meta">
+                <ion-icon name="time-outline"></ion-icon>
+                <span>{{ post.date }}</span>
+            </div>
+
+            <!-- Post Actions (Like and Comment) -->
+            <div class="post-actions">
+                <button class="action-btn like-btn {% if post.user_has_liked %}liked{% endif %}"
+                    onclick="toggleLike('{{ post.post_id }}')">
+                    <ion-icon name="{% if post.user_has_liked %}heart{% else %}heart-outline{% endif %}"></ion-icon>
+                    <span class="like-count">{{ post.like_count }}</span>
+                </button>
+
+                <button class="action-btn comment-btn" onclick="toggleComments('{{ post.post_id }}')">
+                    <ion-icon name="chatbubble-outline"></ion-icon>
+                    <span class="comment-count">{{ post.comment_count }}</span>
+                </button>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section" id="comments-{{ post.post_id }}" style="display: none;">
+                <div class="comments-header">
+                    <h3>Comments</h3>
+                </div>
+
+                <div class="comments-list" id="comments-list-{{ post.post_id }}">
+                    {% if post.comments %}
+                    {% for comment in post.comments %}
+                    <div class="comment-card">
+                        <div class="comment-author">
+                            <div class="comment-avatar">
+                                {{ comment[0][0].upper() }}
+                            </div>
+                            <div class="comment-info">
+                                <span class="comment-username">{{ comment[0] }}</span>
+                                <span class="comment-time">{{ comment[2] }}</span>
+                            </div>
+                        </div>
+                        <div class="comment-content">
+                            {{ comment[1] }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="no-comments">No comments yet. Be the first to comment!</p>
+                    {% endif %}
+                </div>
+
+                <!-- Add Comment Form -->
+                <div class="add-comment-form">
+                    <textarea id="comment-input-{{ post.post_id }}" placeholder="Write a comment..."
+                        rows="3"></textarea>
+                    <button class="comment-submit-btn" onclick="addComment('{{ post.post_id }}')">
+                        <ion-icon name="send-outline"></ion-icon>
+                        Comment
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <p>No posts yet. Be the first to share something!</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
 
-{% for post in forum["posts"] %}
-<div class="bottom">
-    <div class="author">
-        <div class="profile"></div>
-        <p class="name">By <a>{{ post[0] }}</a></p>
-    </div>
-    <p class="intro">{{ post[1] }}</p>
-    <div class="info">
-        <ion-icon name="time"></ion-icon>
-        <p class="info">{{ post[2] }}</p>
-        <ion-icon name="chatboxes"></ion-icon>
-        <p class="info"><a>0 comments</a></p>
-    </div>
-</div>
-{% endfor %}
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-<script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
+<!-- Like and Comment JavaScript -->
+<script>
+    function toggleLike(postId) {
+        const btn = document.querySelector(`[data-post-id="${postId}"] .like-btn`);
+        const icon = btn.querySelector('ion-icon');
+        const countSpan = btn.querySelector('.like-count');
+
+        fetch(`/api/like/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update UI
+                    if (data.is_liked) {
+                        btn.classList.add('liked');
+                        icon.setAttribute('name', 'heart');
+                    } else {
+                        btn.classList.remove('liked');
+                        icon.setAttribute('name', 'heart-outline');
+                    }
+                    countSpan.textContent = data.like_count;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function toggleComments(postId) {
+        const commentsSection = document.getElementById(`comments-${postId}`);
+        if (commentsSection.style.display === 'none') {
+            commentsSection.style.display = 'block';
+        } else {
+            commentsSection.style.display = 'none';
+        }
+    }
+
+    function addComment(postId) {
+        const input = document.getElementById(`comment-input-${postId}`);
+        const content = input.value.trim();
+
+        if (!content) {
+            alert('Please enter a comment');
+            return;
+        }
+
+        fetch(`/api/comment/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: content })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update comment count
+                    const countSpan = document.querySelector(`[data-post-id="${postId}"] .comment-count`);
+                    countSpan.textContent = data.comment_count;
+
+                    // Update comments list
+                    const commentsList = document.getElementById(`comments-list-${postId}`);
+                    commentsList.innerHTML = '';
+
+                    if (data.comments.length > 0) {
+                        data.comments.forEach(comment => {
+                            const commentCard = document.createElement('div');
+                            commentCard.className = 'comment-card';
+                            commentCard.innerHTML = `
+                        <div class="comment-author">
+                            <div class="comment-avatar">
+                                ${comment.username[0].toUpperCase()}
+                            </div>
+                            <div class="comment-info">
+                                <span class="comment-username">${comment.username}</span>
+                                <span class="comment-time">${comment.timestamp}</span>
+                            </div>
+                        </div>
+                        <div class="comment-content">
+                            ${comment.content}
+                        </div>
+                    `;
+                            commentsList.appendChild(commentCard);
+                        });
+                    }
+
+                    // Clear input
+                    input.value = '';
+                } else {
+                    alert('Failed to add comment: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to add comment');
+            });
+    }
+</script>
 {% endblock %}

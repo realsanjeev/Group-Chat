@@ -1,55 +1,279 @@
 {% extends "base.html" %}
 
 {% block title %}
-: Terms and Condition
+Terms & Privacy
 {% endblock %}
 
 {% block bodyContent %}
+<style>
+    .terms-container {
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
 
-<div>
-    <h1>Terms of Use</h1>
+    .terms-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+    }
 
-Welcome to our forum web application! By using our services, you agree to the following terms of use:
-<ul>
-<li><h3>Conduct</h3> 
-    You agree to use the web application in a manner that is respectful of other users and does not violate any applicable laws or regulations. You will not engage in any activity that is harmful, offensive, or disruptive to other users or the web application itself.</li>
-<li><h3>Content</h3> 
-    You are solely responsible for any content that you post on the web application, including text, images, or any other media. You represent and warrant that you have all necessary rights and permissions to post such content, and that it does not infringe on any third-party rights.</li>
-<li><h3>Moderation</h3> 
-    We reserve the right to moderate all content posted on the web application. We may remove any content that we determine violates our terms of use, without notice to you.</li>
-<li><h3>Intellectual Property</h3> 
-    All content on the web application is protected by copyright, trademark, and other intellectual property laws. You may not use any content on the web application without our prior written permission.</li>
-<li><h3>Privacy</h3> 
-    We take your privacy seriously and will only use your personal information as outlined in our privacy policy.</li>
-<li><h3>Termination</h3> 
-    We may terminate your use of the web application at any time for any reason, without notice to you.</li>
-<li><h3>Disclaimer</h3> 
-    We make no warranties or representations regarding the reliability, accuracy, or completeness of any content or information provided on the web application. We disclaim all liability for any damages arising out of your use of the web application.</li>
-</ul>
-<h1>Privacy Policy</h1>
+    .terms-header h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+    }
 
-We are committed to protecting your privacy. This privacy policy explains how we collect, use, and disclose your personal information when you use our forum web application.
-<ul>
-<li><h3>Information We Collect</h3> 
-    We may collect personal information such as your name, email address, and any other information you choose to provide when you register for an account on the web application. We may also collect non-personal information, such as your IP address, browser type, and usage data.</li>
+    .terms-header p {
+        font-size: 18px;
+        opacity: 0.9;
+        margin: 0;
+    }
 
-<li><h3>Use of Information</h3> 
-    We use your personal information to provide you with access to the web application and to communicate with you about the web application. We may also use your information to improve our services and to personalize your experience on the web application.</li>
+    .terms-content {
+        max-width: 900px;
+        margin: -40px auto 0;
+        padding: 0 20px 60px;
+    }
 
-<li><h3>Disclosure of Information</h3> 
-    We may disclose your personal information to third-party service providers who assist us in providing the web application, such as hosting providers or email service providers. We may also disclose your information in response to a legal request, such as a subpoena or court order.</li>
+    .terms-card {
+        background: white;
+        border-radius: 15px;
+        padding: 50px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
 
-<li><h3>Security</h3> 
-    We take reasonable measures to protect your personal information from unauthorized access or disclosure. However, no security measures are 100% effective, and we cannot guarantee the security of your information.</li>
+    .terms-card h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #333;
+        margin: 0 0 30px 0;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #667eea;
+    }
 
-<li><h3>Changes to Policy</h3> 
-    We may update this privacy policy from time to time. If we make material changes to the policy, we will notify you by email or by posting a notice on the web application.</li>
-</ul>
-If you have any questions about our terms of use or privacy policy, please contact us at @realsanjeev2.
+    .terms-card h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #667eea;
+        margin: 25px 0 10px 0;
+    }
 
+    .terms-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .terms-card li {
+        margin-bottom: 25px;
+        padding-left: 0;
+    }
+
+    .terms-card p,
+    .terms-card li {
+        font-size: 16px;
+        line-height: 1.8;
+        color: #555;
+    }
+
+    .section-intro {
+        font-size: 17px;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.8;
+    }
+
+    .contact-info {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 30px;
+        text-align: center;
+        border-left: 4px solid #667eea;
+    }
+
+    .contact-info p {
+        margin: 0;
+        color: #333;
+    }
+
+    .contact-info a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .contact-info a:hover {
+        text-decoration: underline;
+    }
+
+    .footer {
+        background: #333;
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    .footer .ticker {
+        display: inline-block;
+        margin: 0 15px;
+        font-size: 14px;
+    }
+
+    .back-btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: white;
+        color: #667eea;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+
+    .back-btn:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+        .terms-card {
+            padding: 30px 25px;
+        }
+
+        .terms-header h1 {
+            font-size: 32px;
+        }
+
+        .terms-card h2 {
+            font-size: 26px;
+        }
+    }
+</style>
+
+<div class="terms-container">
+    <div class="terms-header">
+        <h1>Terms & Privacy Policy</h1>
+        <p>Please read these terms carefully before using our service</p>
+        <a href="/" class="back-btn">← Back to Home</a>
+    </div>
+
+    <div class="terms-content">
+        <!-- Terms of Use -->
+        <div class="terms-card">
+            <h2>Terms of Use</h2>
+            <p class="section-intro">
+                Welcome to our forum web application! By using our services, you agree to the following terms of use:
+            </p>
+
+            <ul>
+                <li>
+                    <h3>Conduct</h3>
+                    You agree to use the web application in a manner that is respectful of other users and does not
+                    violate any applicable laws or regulations. You will not engage in any activity that is harmful,
+                    offensive, or disruptive to other users or the web application itself.
+                </li>
+
+                <li>
+                    <h3>Content</h3>
+                    You are solely responsible for any content that you post on the web application, including text,
+                    images, or any other media. You represent and warrant that you have all necessary rights and
+                    permissions to post such content, and that it does not infringe on any third-party rights.
+                </li>
+
+                <li>
+                    <h3>Moderation</h3>
+                    We reserve the right to moderate all content posted on the web application. We may remove any
+                    content that we determine violates our terms of use, without notice to you.
+                </li>
+
+                <li>
+                    <h3>Intellectual Property</h3>
+                    All content on the web application is protected by copyright, trademark, and other intellectual
+                    property laws. You may not use any content on the web application without our prior written
+                    permission.
+                </li>
+
+                <li>
+                    <h3>Privacy</h3>
+                    We take your privacy seriously and will only use your personal information as outlined in our
+                    privacy policy.
+                </li>
+
+                <li>
+                    <h3>Termination</h3>
+                    We may terminate your use of the web application at any time for any reason, without notice to you.
+                </li>
+
+                <li>
+                    <h3>Disclaimer</h3>
+                    We make no warranties or representations regarding the reliability, accuracy, or completeness of any
+                    content or information provided on the web application. We disclaim all liability for any damages
+                    arising out of your use of the web application.
+                </li>
+            </ul>
+        </div>
+
+        <!-- Privacy Policy -->
+        <div class="terms-card">
+            <h2>Privacy Policy</h2>
+            <p class="section-intro">
+                We are committed to protecting your privacy. This privacy policy explains how we collect, use, and
+                disclose your personal information when you use our forum web application.
+            </p>
+
+            <ul>
+                <li>
+                    <h3>Information We Collect</h3>
+                    We may collect personal information such as your name, email address, and any other information you
+                    choose to provide when you register for an account on the web application. We may also collect
+                    non-personal information, such as your IP address, browser type, and usage data.
+                </li>
+
+                <li>
+                    <h3>Use of Information</h3>
+                    We use your personal information to provide you with access to the web application and to
+                    communicate with you about the web application. We may also use your information to improve our
+                    services and to personalize your experience on the web application.
+                </li>
+
+                <li>
+                    <h3>Disclosure of Information</h3>
+                    We may disclose your personal information to third-party service providers who assist us in
+                    providing the web application, such as hosting providers or email service providers. We may also
+                    disclose your information in response to a legal request, such as a subpoena or court order.
+                </li>
+
+                <li>
+                    <h3>Security</h3>
+                    We take reasonable measures to protect your personal information from unauthorized access or
+                    disclosure. However, no security measures are 100% effective, and we cannot guarantee the security
+                    of your information.
+                </li>
+
+                <li>
+                    <h3>Changes to Policy</h3>
+                    We may update this privacy policy from time to time. If we make material changes to the policy, we
+                    will notify you by email or by posting a notice on the web application.
+                </li>
+            </ul>
+
+            <div class="contact-info">
+                <p>
+                    If you have any questions about our terms of use or privacy policy,
+                    please contact us at <a href="https://github.com/realsanjeev2" target="_blank">@realsanjeev2</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span class="ticker">Copyright © 2023-2025</span>
+        <span class="ticker">Real Group Forum</span>
+    </div>
 </div>
-<div class="footer">
-    <span class="ticker">Copyright © 2023</span>
-  <span class="ticker">Real Group Forum</span>
-  </div>
-{%endblock bodyContent%}
+{% endblock %}

@@ -1,31 +1,78 @@
 {% extends "index_layout.html" %}
 {% block title %}
-Group Dashboard
+Group Operations
 {% endblock %}
 
 {% block index_layout %}
-{{ user }}
+<link rel="stylesheet" href="{{url_for('static', filename='css/groups.css')}}">
 
-<div style="display: flex;">
-  <div style="width: 200px;">
-    <div class="group-available">Group Conection</div>
-    {% for group in groups["community"] %}
-    <a href="/group/{{ group[0] }}"
-      style="display: block; padding: 10px; background-color: #4CAF50; color: white; text-align: center; text-decoration: none;">{{group[0]}}</a>
-    <br>
-    {% endfor %}
+<div class="groups-page">
+  <div class="page-header">
+    <h1>Group Management</h1>
+    <p>Create new groups or join existing communities</p>
   </div>
-  <div style="flex: 1;">
-    <form action="#" method="POST" style="padding: 10px;">
-      <label for="create-community">Create Group</label>
-      <input type="text" id="create-community" name="create-community" required placeholder="Create Group"><br><br>
-      <input type="submit" value="Create">
-    </form>
-    <form action="#" method="POST" style="padding: 10px;">
-      <label for="join-community">Join Group</label>
-      <input type="text" id="join-community" name="join-community" required placeholder="Join Group"><br><br>
-      <input type="submit" value="Join">
-    </form>
+
+  <div class="groups-container">
+    <!-- Sidebar with groups list -->
+    <div class="groups-sidebar">
+      <div class="sidebar-header">Your Groups</div>
+      {% if groups["community"] %}
+      <div class="group-list">
+        {% for group in groups["community"] %}
+        <a href="/group/{{ group[0] }}" class="group-link">
+          {{ group[0] }}
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-groups">
+        No groups yet. Create or join one!
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Main content with forms -->
+    <div class="groups-main">
+      <h2 class="main-header">Manage Your Groups</h2>
+
+      <div class="forms-grid">
+        <!-- Create Group Form -->
+        <div class="form-card">
+          <h3>Create Group</h3>
+          <form action="#" method="POST">
+            {{ create_form.hidden_tag() }}
+            <div class="form-group">
+              <label for="group_name">Group Name</label>
+              {{ create_form.group_name(id="create-community", placeholder="Enter group name") }}
+              {% if create_form.group_name.errors %}
+              <div class="error-message">
+                {% for error in create_form.group_name.errors %}<p>{{ error }}</p>{% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            <button type="submit" name="create-submit" class="submit-btn">Create Group</button>
+          </form>
+        </div>
+
+        <!-- Join Group Form -->
+        <div class="form-card">
+          <h3>Join Group</h3>
+          <form action="#" method="POST">
+            {{ join_form.hidden_tag() }}
+            <div class="form-group">
+              <label for="group_name">Group Name</label>
+              {{ join_form.group_name(id="join-community", placeholder="Enter group name") }}
+              {% if join_form.group_name.errors %}
+              <div class="error-message">
+                {% for error in join_form.group_name.errors %}<p>{{ error }}</p>{% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            <button type="submit" name="join-submit" class="submit-btn">Join Group</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

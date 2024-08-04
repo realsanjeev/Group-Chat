@@ -1,0 +1,160 @@
+/* Modern Navigation Bar Styles */
+
+nav {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0;
+}
+
+nav .nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+nav h2.logo {
+    font-weight: 700;
+    font-size: 24px;
+    color: white;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+nav h2.logo::before {
+    content: "💬";
+    font-size: 28px;
+}
+
+nav .bars {
+    display: none;
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+ul.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 5px;
+}
+
+li.nav-link {
+    margin: 0;
+    padding: 0;
+}
+
+li.nav-link a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    color: white;
+    text-decoration: none;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-transform: capitalize;
+}
+
+li.nav-link a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+li.nav-link.auth a {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+li.nav-link.auth a:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Icons for nav links */
+li.nav-link a[href="/home"]::before {
+    content: "🏠";
+    font-size: 18px;
+}
+
+li.nav-link a[href="/group_ops"]::before {
+    content: "👥";
+    font-size: 18px;
+}
+
+li.nav-link a[href="/profile"]::before {
+    content: "👤";
+    font-size: 18px;
+}
+
+li.nav-link a[href="/logout"]::before {
+    content: "🚪";
+    font-size: 18px;
+}
+
+/* Mobile Navigation */
+@media screen and (max-width: 800px) {
+    nav .bars {
+        display: block;
+    }
+
+    nav .nav-container {
+        padding: 1rem;
+    }
+
+    ul.nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        flex-direction: column;
+        padding: 1rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        gap: 0;
+    }
+
+    nav.active ul.nav-links {
+        display: flex;
+    }
+
+    li.nav-link {
+        width: 100%;
+    }
+
+    li.nav-link a {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 6px;
+    }
+
+    li.nav-link.auth a {
+        margin-top: 10px;
+    }
+}
+
+/* Smooth transitions */
+nav,
+nav a,
+nav button {
+    transition: all 0.3s ease;
+}
